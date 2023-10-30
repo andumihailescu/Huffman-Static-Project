@@ -17,9 +17,15 @@ namespace Bit_Reader_Writer
         public BitReader(string inputFilePath) // filePath = the file path to the input file
         {
             inputFileStream = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read);
-            NumberOfAvailableBits = this.inputFileStream.Length * 8;
+            //NumberOfAvailableBits = this.inputFileStream.Length * 8;
             NumberOfBitsToRead = 0;// initialize to 0 or 1 or 7 or 8;It is a counter to see if the buffer is empty or not
         }
+
+        public long GetFileLengthInBytes()
+        {
+            return inputFileStream.Length;
+        }
+
         private bool IsBufferEmpty()
         {
             if (NumberOfBitsToRead == 0)
@@ -30,6 +36,13 @@ namespace Bit_Reader_Writer
             {
                 return false;
             }
+        }
+
+        public void CloseFile()
+        {
+            inputFileStream.Flush();
+            inputFileStream.Close();
+            inputFileStream.Dispose();
         }
 
         //The return type can be byte or int or even a boolean. Always this methods returns 1 bit - 0 or 1
@@ -46,7 +59,7 @@ namespace Bit_Reader_Writer
             byte result = (byte)((BufferReader >> (8 - NumberOfBitsToRead)) & 1);
             //Probably decrease number of available bits
             NumberOfBitsToRead--;
-            NumberOfAvailableBits--;
+            //NumberOfAvailableBits--;
             return result;
         }
         public uint ReadNBits(int nr) //nr will be a value [1..32]

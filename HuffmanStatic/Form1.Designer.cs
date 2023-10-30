@@ -48,6 +48,7 @@
             loadFileBtn.TabIndex = 0;
             loadFileBtn.Text = "Load File";
             loadFileBtn.UseVisualStyleBackColor = true;
+            loadFileBtn.Click += loadFileBtn_Click;
             // 
             // encodeFileBtn
             // 
@@ -57,6 +58,7 @@
             encodeFileBtn.TabIndex = 1;
             encodeFileBtn.Text = "Encode File";
             encodeFileBtn.UseVisualStyleBackColor = true;
+            encodeFileBtn.Click += encodeFileBtn_Click;
             // 
             // loadEncodedFileBtn
             // 
@@ -66,6 +68,7 @@
             loadEncodedFileBtn.TabIndex = 2;
             loadEncodedFileBtn.Text = "Load Encoded File";
             loadEncodedFileBtn.UseVisualStyleBackColor = true;
+            loadEncodedFileBtn.Click += loadEncodedFileBtn_Click;
             // 
             // decodeFileBtn
             // 
@@ -75,6 +78,7 @@
             decodeFileBtn.TabIndex = 3;
             decodeFileBtn.Text = "Decode File";
             decodeFileBtn.UseVisualStyleBackColor = true;
+            decodeFileBtn.Click += decodeFileBtn_Click;
             // 
             // showCodesEncoderCkb
             // 

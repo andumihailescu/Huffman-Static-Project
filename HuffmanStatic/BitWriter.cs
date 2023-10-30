@@ -12,19 +12,16 @@ namespace Bit_Reader_Writer
     {
         private byte BufferWriter; // It can be a byte or an array of items (each element in the array will represent a BIT)
         private int NumberOfBitsToWrite;
-        private int NumberOfBitsToRead;
         private FileStream outputFileStream;
-        private string outputFilePath;
         public BitWriter(string outputFilePath) // file path of the output file
         {
-            this.outputFilePath = outputFilePath;
             outputFileStream = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write);
             BufferWriter = 0;
             NumberOfBitsToWrite = 8;// initialize to 0 or 1 or 7 or 8;
         }
 
 
-        public void Folo()
+        public void CloseFile()
         { 
             outputFileStream.Flush();
             outputFileStream.Close();
