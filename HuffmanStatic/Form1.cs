@@ -28,6 +28,10 @@ namespace HuffmanStatic
         {
             encoder.InitializeEncoder(encoderInputFilePath, encoderOutputFilePath);
             encoder.EncodeFile();
+            if (showCodesEncoderCkb.Checked)
+            {
+                encoder.DisplaySymbolCodes(this.listBoxEncoder);
+            }
         }
 
         private void loadEncodedFileBtn_Click(object sender, EventArgs e)

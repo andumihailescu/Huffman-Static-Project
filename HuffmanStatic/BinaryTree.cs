@@ -38,12 +38,4 @@ namespace HuffmanStatic
             this.right = right;
         }
     }
-    
-    internal class BinaryTree
-    {
-        public BinaryTree()
-        {
-        
-        }
-    }
 }

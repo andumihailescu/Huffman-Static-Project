@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
 
 namespace HuffmanStatic
@@ -132,6 +133,8 @@ namespace HuffmanStatic
             bitReader = new BitReader(encoderInputFilePath);
             bitWriter = new BitWriter(encoderOutputFilePath);
 
+            int encodedFileSizeInBits = 0;
+
             do
             {
                 //numberOfBits = Random between [1..32]
@@ -141,10 +144,20 @@ namespace HuffmanStatic
                 }
 
                 uint value = bitReader.ReadNBits(numberOfBits);
-                bitWriter.WriteNBits(symbolSizeInBitsList[value], listOfEncodedSymbols[value]);
+                int nr = symbolSizeInBitsList[value];
+                uint symbol = listOfEncodedSymbols[value];
+
+                //bitWriter.WriteNBits(symbolSizeInBitsList[value], listOfEncodedSymbols[value]);
+                bitWriter.WriteNBits(nr, symbol);
+                encodedFileSizeInBits += nr;
                 numberOfRemainingBits -= numberOfBits;
 
             } while (numberOfRemainingBits > 0);
+
+            if ((encodedFileSizeInBits % 8) != 0)
+            {
+                bitWriter.WriteNBits((int)(8 - encodedFileSizeInBits % 8), 0);
+            }
 
             bitReader.CloseFile();
             bitWriter.CloseFile();
@@ -158,6 +171,23 @@ namespace HuffmanStatic
 
             GenerateModel();
 
+        }
+
+        public void DisplaySymbolCodes(ListBox listBox)
+        {
+            for(int i = 0; i < 256; i++)
+            {
+                if (symbolSizeInBitsList[i] != 0)
+                {
+                    char symbol = (char)i;
+                    string value = "";
+                    for(int j = 0; j < symbolSizeInBitsList[i]; j++)
+                    {
+                        value += ((listOfEncodedSymbols[i] >> (symbolSizeInBitsList[i] - j - 1)) & 1);
+                    }
+                    listBox.Items.Add(symbol + "= " + value);
+                }
+            }
         }
 
     }
