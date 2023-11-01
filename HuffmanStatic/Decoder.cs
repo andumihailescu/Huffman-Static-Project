@@ -4,33 +4,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-using System.Xml.Linq;
 
 namespace HuffmanStatic
 {
-    internal class Encoder
+    internal class Decoder
     {
-
         private BitReader bitReader;
         private BitWriter bitWriter;
+        private string decoderInputFilePath;
+        private string decoderOutputFilePath;
         private long fileLength;
         private long fileLengthInBits;
         private int[] symbolFrequency;
-        private Node root;
-
         private uint[] listOfEncodedSymbols;
         private int[] symbolSizeInBitsList;
+        private Node root;
 
-        private string encoderInputFilePath;
-        private string encoderOutputFilePath;
+        private long numberOfRemainingBits;
+        private int numberOfSymbols = 0;
 
-        public Encoder() 
-        {
-            
+        public Decoder()
+        { 
+        
         }
 
-        public void InitializeEncoder(string inputFilePath, string outputFilePath)
+        public void InitializeDecoder(string inputFilePath, string outputFilePath)
         {
             bitReader = new BitReader(inputFilePath);
             bitWriter = new BitWriter(outputFilePath);
@@ -39,31 +37,25 @@ namespace HuffmanStatic
             symbolFrequency = new int[256];
             listOfEncodedSymbols = new uint[256];
             symbolSizeInBitsList = new int[256];
-            encoderInputFilePath = inputFilePath;
-            encoderOutputFilePath = outputFilePath;
+            decoderInputFilePath = inputFilePath;
+            decoderOutputFilePath = outputFilePath;
         }
 
-        public void CountFrequency()
+        public void GetFileHeader()
         {
             int numberOfBits = 8;
-            long numberOfRemainingBits = fileLengthInBits;
+            numberOfRemainingBits = fileLengthInBits;
 
-            do
+            for (int i = 0; i < 256; i++)
             {
-                //numberOfBits = Random between [1..32]
-                if (numberOfBits > numberOfRemainingBits)
-                {
-                    numberOfBits = (int)numberOfRemainingBits;
-                }
-
                 uint value = bitReader.ReadNBits(numberOfBits);
-                symbolFrequency[value]++;
+                symbolFrequency[i] += (int)value;
                 numberOfRemainingBits -= numberOfBits;
-
-            } while(numberOfRemainingBits > 0);
-
-            bitReader.CloseFile();
-            //bitWriter.CloseFile();
+                if (value != 0)
+                {
+                    numberOfSymbols += (int)value;
+                }
+            }
         }
 
         public void CreateBinaryTree()
@@ -97,14 +89,14 @@ namespace HuffmanStatic
         }
 
         /*public void DisplayTree(Node node, int depth = 0)
-        {
-            if (node == null)
-                return;
-            Console.WriteLine(new string(' ', depth * 2) + $"{node.GetSymbol()} ({node.GetFrequency()})");
+               {
+                   if (node == null)
+                       return;
+                   Console.WriteLine(new string(' ', depth * 2) + $"{node.GetSymbol()} ({node.GetFrequency()})");
 
-            DisplayTree(node.GetLeft(), depth + 1);
-            DisplayTree(node.GetRight(), depth + 1);
-        }*/
+                   DisplayTree(node.GetLeft(), depth + 1);
+                   DisplayTree(node.GetRight(), depth + 1);
+               }*/
 
         public void DepthFirstSearch(Node node, uint currentCode, int currentSize)
         {
@@ -128,67 +120,53 @@ namespace HuffmanStatic
             DepthFirstSearch(root, 0, 0);
         }
 
-
-        public void EncodeFile()
+        public void DecodeFile()
         {
-            CountFrequency();
+            GetFileHeader();
 
             GenerateModel();
 
             int numberOfBits = 8;
-            long numberOfRemainingBits = fileLengthInBits;
-
-            bitReader = new BitReader(encoderInputFilePath);
-            //bitWriter = new BitWriter(encoderOutputFilePath);
-
-            int encodedFileSizeInBits = 0;
-
-            for (int i = 0; i < 256; i++)
-            {
-                //convert from int to uint!!!!
-                Console.Write(Convert.ToChar(i) + ": ");
-                bitWriter.WriteNBits(numberOfBits, (uint)symbolFrequency[i]);
-                encodedFileSizeInBits += 8;
-            }
+            int oneBit = 1;
+            Node node = root;
 
             do
             {
-                //numberOfBits = Random between [1..32]
-                if (numberOfBits > numberOfRemainingBits)
-                {
-                    numberOfBits = (int)numberOfRemainingBits;
-                }
                 
-                uint value = bitReader.ReadNBits(numberOfBits);
-                int nr = symbolSizeInBitsList[value];
-                uint symbol = listOfEncodedSymbols[value];
+                if (node.GetLeft() != null && node.GetRight() != null)
+                {
+                    byte value = (byte)bitReader.ReadNBits(oneBit);
+                    if (value == 0)
+                    {
+                        node = node.GetLeft();
+                    }
+                    else
+                    {
+                        node = node.GetRight();
+                    }
+                }
+                else
+                {
+                    bitWriter.WriteNBits(numberOfBits, (uint)node.GetSymbol());
+                    node = root;
+                    numberOfSymbols--;
+                }
 
-                //bitWriter.WriteNBits(symbolSizeInBitsList[value], listOfEncodedSymbols[value]);
-                bitWriter.WriteNBits(nr, symbol);
-                encodedFileSizeInBits += nr;
-                numberOfRemainingBits -= numberOfBits;
-
-            } while (numberOfRemainingBits > 0);
-
-            if ((encodedFileSizeInBits % 8) != 0)
-            {
-                bitWriter.WriteNBits((int)(8 - encodedFileSizeInBits % 8), 0);
-            }
+            } while (numberOfSymbols > 0);
 
             bitReader.CloseFile();
             bitWriter.CloseFile();
-
         }
 
         public void DisplaySymbolCodes(ListBox listBox)
         {
-            for(int i = 0; i < 256; i++)
+            for (int i = 0; i < 256; i++)
             {
                 if (symbolSizeInBitsList[i] != 0)
                 {
                     char symbol = (char)i;
                     string value = "";
-                    for(int j = 0; j < symbolSizeInBitsList[i]; j++)
+                    for (int j = 0; j < symbolSizeInBitsList[i]; j++)
                     {
                         value += ((listOfEncodedSymbols[i] >> (symbolSizeInBitsList[i] - j - 1)) & 1);
                     }
@@ -196,6 +174,5 @@ namespace HuffmanStatic
                 }
             }
         }
-
     }
 }
