@@ -11,16 +11,11 @@ namespace HuffmanStatic
     {
         private BitReader bitReader;
         private BitWriter bitWriter;
-        private string decoderInputFilePath;
-        private string decoderOutputFilePath;
-        private long fileLength;
-        private long fileLengthInBits;
         private int[] symbolFrequency;
         private uint[] listOfEncodedSymbols;
         private int[] symbolSizeInBitsList;
         private Node root;
 
-        private long numberOfRemainingBits;
         private int numberOfSymbols = 0;
 
         public Decoder()
@@ -32,25 +27,19 @@ namespace HuffmanStatic
         {
             bitReader = new BitReader(inputFilePath);
             bitWriter = new BitWriter(outputFilePath);
-            fileLength = bitReader.GetFileLengthInBytes();
-            fileLengthInBits = fileLength * 8;
             symbolFrequency = new int[256];
             listOfEncodedSymbols = new uint[256];
             symbolSizeInBitsList = new int[256];
-            decoderInputFilePath = inputFilePath;
-            decoderOutputFilePath = outputFilePath;
         }
 
         public void GetFileHeader()
         {
             int numberOfBits = 8;
-            numberOfRemainingBits = fileLengthInBits;
 
             for (int i = 0; i < 256; i++)
             {
                 uint value = bitReader.ReadNBits(numberOfBits);
                 symbolFrequency[i] += (int)value;
-                numberOfRemainingBits -= numberOfBits;
                 if (value != 0)
                 {
                     numberOfSymbols += (int)value;
@@ -160,6 +149,8 @@ namespace HuffmanStatic
 
         public void DisplaySymbolCodes(ListBox listBox)
         {
+            listBox.Items.Clear();
+
             for (int i = 0; i < 256; i++)
             {
                 if (symbolSizeInBitsList[i] != 0)

@@ -23,7 +23,6 @@ namespace HuffmanStatic
         private int[] symbolSizeInBitsList;
 
         private string encoderInputFilePath;
-        private string encoderOutputFilePath;
 
         public Encoder() 
         {
@@ -40,7 +39,6 @@ namespace HuffmanStatic
             listOfEncodedSymbols = new uint[256];
             symbolSizeInBitsList = new int[256];
             encoderInputFilePath = inputFilePath;
-            encoderOutputFilePath = outputFilePath;
         }
 
         public void CountFrequency()
@@ -50,7 +48,6 @@ namespace HuffmanStatic
 
             do
             {
-                //numberOfBits = Random between [1..32]
                 if (numberOfBits > numberOfRemainingBits)
                 {
                     numberOfBits = (int)numberOfRemainingBits;
@@ -63,7 +60,6 @@ namespace HuffmanStatic
             } while(numberOfRemainingBits > 0);
 
             bitReader.CloseFile();
-            //bitWriter.CloseFile();
         }
 
         public void CreateBinaryTree()
@@ -139,7 +135,6 @@ namespace HuffmanStatic
             long numberOfRemainingBits = fileLengthInBits;
 
             bitReader = new BitReader(encoderInputFilePath);
-            //bitWriter = new BitWriter(encoderOutputFilePath);
 
             int encodedFileSizeInBits = 0;
 
@@ -153,19 +148,17 @@ namespace HuffmanStatic
 
             do
             {
-                //numberOfBits = Random between [1..32]
                 if (numberOfBits > numberOfRemainingBits)
                 {
                     numberOfBits = (int)numberOfRemainingBits;
                 }
                 
                 uint value = bitReader.ReadNBits(numberOfBits);
-                int nr = symbolSizeInBitsList[value];
+                int size = symbolSizeInBitsList[value];
                 uint symbol = listOfEncodedSymbols[value];
 
-                //bitWriter.WriteNBits(symbolSizeInBitsList[value], listOfEncodedSymbols[value]);
-                bitWriter.WriteNBits(nr, symbol);
-                encodedFileSizeInBits += nr;
+                bitWriter.WriteNBits(size, symbol);
+                encodedFileSizeInBits += size;
                 numberOfRemainingBits -= numberOfBits;
 
             } while (numberOfRemainingBits > 0);
@@ -182,6 +175,8 @@ namespace HuffmanStatic
 
         public void DisplaySymbolCodes(ListBox listBox)
         {
+            listBox.Items.Clear();
+
             for(int i = 0; i < 256; i++)
             {
                 if (symbolSizeInBitsList[i] != 0)
