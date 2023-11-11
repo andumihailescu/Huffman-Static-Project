@@ -34,7 +34,7 @@ namespace HuffmanStatic
             encoder.EncodeFile();
             if (showCodesCkb.Checked)
             {
-                DisplaySymbolCodes(this.codesListBox);
+                DisplaySymbolCodes(encoder.GetModel());
             }
         }
 
@@ -62,25 +62,25 @@ namespace HuffmanStatic
             decoder.DecodeFile();
             if (showCodesCkb.Checked)
             {
-                DisplaySymbolCodes(this.codesListBox);
+                DisplaySymbolCodes(decoder.GetModel());
             }
         }
 
-        private void DisplaySymbolCodes(ListBox listBox)
+        private void DisplaySymbolCodes(Model model)
         {
-            listBox.Items.Clear();
+            codesListBox.Items.Clear();
 
             for (uint i = 0; i < 256; i++)
             {
-                if (encoder.GetModel().GetSymbolSizeInBits(i) != 0)
+                if (model.GetSymbolSizeInBits(i) != 0)
                 {
                     char symbol = (char)i;
                     string value = "";
-                    for (uint j = 0; j < encoder.GetModel().GetSymbolSizeInBits(i); j++)
+                    for (int j = 0; j < model.GetSymbolSizeInBits(i); j++)
                     {
-                        value += ((encoder.GetModel().GetEncodedSymbol(i) >> (int)(encoder.GetModel().GetSymbolSizeInBits(i) - j - 1)) & 1);
+                        value += ((model.GetEncodedSymbol(i) >> (model.GetSymbolSizeInBits(i) - j - 1)) & 1);
                     }
-                    listBox.Items.Add(symbol + "= " + value);
+                    codesListBox.Items.Add(symbol + "= " + value);
                 }
             }
         }
