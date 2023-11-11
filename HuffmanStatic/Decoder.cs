@@ -12,7 +12,7 @@ namespace HuffmanStatic
     {
         private BitReader bitReader;
         private BitWriter bitWriter;
-        private int[] symbolFrequency;
+        private uint[] symbolFrequency;
         private Model model;
 
         private uint numberOfSymbols;
@@ -28,12 +28,12 @@ namespace HuffmanStatic
         {
             bitReader = new BitReader(inputFilePath);
             bitWriter = new BitWriter(outputFilePath);
-            symbolFrequency = new int[256];
+            symbolFrequency = new uint[256];
         }
 
         public void GetFileHeader()
         {
-            int numberOfBits = 8;
+            uint numberOfBits = 8;
 
             uint charactersUsedCounter = bitReader.ReadNBits(numberOfBits);
 
@@ -41,8 +41,8 @@ namespace HuffmanStatic
             {
                 uint character = bitReader.ReadNBits(8);
                 uint size = bitReader.ReadNBits(4);
-                uint value = bitReader.ReadNBits((int)size);
-                symbolFrequency[character] += (int)value;
+                uint value = bitReader.ReadNBits(size);
+                symbolFrequency[character] += value;
                 numberOfSymbols += value;
             }
         }
@@ -61,8 +61,8 @@ namespace HuffmanStatic
 
             CreateModel();
 
-            int numberOfBits = 8;
-            int oneBit = 1;
+            uint numberOfBits = 8;
+            uint oneBit = 1;
             Node node = model.GetRoot();
 
             do
@@ -82,7 +82,7 @@ namespace HuffmanStatic
                 }
                 else
                 {
-                    bitWriter.WriteNBits(numberOfBits, (uint)node.GetSymbol());
+                    bitWriter.WriteNBits(numberOfBits, node.GetSymbol());
                     node = model.GetRoot();
                     numberOfSymbols--;
                 }

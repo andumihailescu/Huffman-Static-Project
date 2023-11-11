@@ -8,22 +8,16 @@ namespace HuffmanStatic
 {
     internal class Node
     {
-        private int frequency;
-        private int symbol;
+        private uint frequency;
+        private uint symbol;
         private Node left, right;
         
-        public int GetFrequency() { return frequency; }
-        public int GetSymbol() { return symbol; }
+        public uint GetFrequency() { return frequency; }
+        public uint GetSymbol() { return symbol; }
         public Node GetLeft() { return left; }
         public Node GetRight() { return right; }
         
-
-        public Node()
-        {
-
-        }
-
-        public Node(int frequency, int symbol)
+        public Node(uint frequency, uint symbol)
         {
             this.frequency = frequency;
             this.symbol = symbol;
@@ -31,7 +25,7 @@ namespace HuffmanStatic
             right = null;
         }
 
-        public Node(int frequency, Node left, Node right)
+        public Node(uint frequency, Node left, Node right)
         {
             this.frequency = frequency;
             this.symbol = 0; ;

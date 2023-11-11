@@ -78,7 +78,7 @@ namespace HuffmanStatic
                     string value = "";
                     for (int j = 0; j < model.GetSymbolSizeInBits(i); j++)
                     {
-                        value += ((model.GetEncodedSymbol(i) >> (model.GetSymbolSizeInBits(i) - j - 1)) & 1);
+                        value += ((model.GetEncodedSymbol(i) >> (int)(model.GetSymbolSizeInBits(i) - j - 1)) & 1);
                     }
                     codesListBox.Items.Add(symbol + "= " + value);
                 }

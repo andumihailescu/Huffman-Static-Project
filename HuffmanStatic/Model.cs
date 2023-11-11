@@ -10,20 +10,20 @@ namespace HuffmanStatic
     {
         private Node root;
         private uint[] listOfEncodedSymbols;
-        private int[] symbolSizeInBitsList;
+        private uint[] symbolSizeInBitsList;
 
         public Model()
         {
             listOfEncodedSymbols = new uint[256];
-            symbolSizeInBitsList = new int[256];
+            symbolSizeInBitsList = new uint[256];
         }
 
         public Node GetRoot() { return root; }
 
-        public void CreateBinaryTree(int[] symbolFrequency)
+        public void CreateBinaryTree(uint[] symbolFrequency)
         {
             List<Node> leaves = new List<Node>();
-            for (int i = 0; i < 256; i++)
+            for (uint i = 0; i < 256; i++)
             {
                 if (symbolFrequency[i] > 0)
                 {
@@ -34,7 +34,7 @@ namespace HuffmanStatic
             while (leaves.Count > 1)
             {
                 leaves = leaves.OrderBy(o => o.GetFrequency()).ToList();
-                int frequencySum = leaves[0].GetFrequency() + leaves[1].GetFrequency();
+                uint frequencySum = leaves[0].GetFrequency() + leaves[1].GetFrequency();
                 Node node = new Node(frequencySum, leaves[0], leaves[1]);
                 leaves.RemoveAt(0);
                 leaves.RemoveAt(0);
@@ -45,7 +45,7 @@ namespace HuffmanStatic
 
         }
 
-        public void DepthFirstSearch(Node node, uint currentCode, int currentSize)
+        public void DepthFirstSearch(Node node, uint currentCode, uint currentSize)
         {
 
             if (node.GetLeft() == null && node.GetRight() == null)
@@ -69,7 +69,7 @@ namespace HuffmanStatic
         {
             return listOfEncodedSymbols[index];
         }
-        public int GetSymbolSizeInBits(uint index)
+        public uint GetSymbolSizeInBits(uint index)
         {
             return symbolSizeInBitsList[index];
         }

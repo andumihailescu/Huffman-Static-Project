@@ -18,7 +18,7 @@ namespace HuffmanStatic
         private BitWriter bitWriter;
         private long fileLength;
         private long fileLengthInBits;
-        private int[] symbolFrequency;
+        private uint[] symbolFrequency;
         private Model model;
 
         private string encoderInputFilePath;
@@ -36,20 +36,20 @@ namespace HuffmanStatic
             bitWriter = new BitWriter(outputFilePath);
             fileLength = bitReader.GetFileLengthInBytes();
             fileLengthInBits = fileLength * 8;
-            symbolFrequency = new int[256];
+            symbolFrequency = new uint[256];
             encoderInputFilePath = inputFilePath;
         }
 
         public void CountFrequency()
         {
-            int numberOfBits = 8;
+            uint numberOfBits = 8;
             long numberOfRemainingBits = fileLengthInBits;
 
             do
             {
                 if (numberOfBits > numberOfRemainingBits)
                 {
-                    numberOfBits = (int)numberOfRemainingBits;
+                    numberOfBits = (uint)numberOfRemainingBits;
                 }
 
                 uint value = bitReader.ReadNBits(numberOfBits);
@@ -76,14 +76,14 @@ namespace HuffmanStatic
 
             CreateModel();
 
-            int numberOfBits = 8;
+            uint numberOfBits = 8;
             long numberOfRemainingBits = fileLengthInBits;
 
             bitReader = new BitReader(encoderInputFilePath);
 
-            int encodedFileSizeInBits = 0;
+            uint encodedFileSizeInBits = 0;
 
-            int charactersUsedCounter = 0;
+            uint charactersUsedCounter = 0;
 
             for (int i = 0; i < 256; i++)
             {
@@ -93,18 +93,18 @@ namespace HuffmanStatic
                 }
             }
 
-            bitWriter.WriteNBits(numberOfBits, (uint)charactersUsedCounter);
+            bitWriter.WriteNBits(numberOfBits, charactersUsedCounter);
             encodedFileSizeInBits += numberOfBits;
 
-            for (int i = 0; i < 256; i++)
+            for (uint i = 0; i < 256; i++)
             {
                 //convert from int to uint!!!!
                 if (symbolFrequency[i] != 0)
                 {
-                    int size = (int)Math.Ceiling(Math.Log2(symbolFrequency[i] + 1));
-                    bitWriter.WriteNBits(8, (uint)i);
-                    bitWriter.WriteNBits(4, (uint)size);
-                    bitWriter.WriteNBits(size, (uint)symbolFrequency[i]);
+                    uint size = (uint)Math.Ceiling(Math.Log2(symbolFrequency[i] + 1));
+                    bitWriter.WriteNBits(8, i);
+                    bitWriter.WriteNBits(4, size);
+                    bitWriter.WriteNBits(size, symbolFrequency[i]);
                     encodedFileSizeInBits = encodedFileSizeInBits + 8 + 4 + size;
                 }
                 
@@ -114,11 +114,11 @@ namespace HuffmanStatic
             {
                 if (numberOfBits > numberOfRemainingBits)
                 {
-                    numberOfBits = (int)numberOfRemainingBits;
+                    numberOfBits = (uint)numberOfRemainingBits;
                 }
                 
                 uint value = bitReader.ReadNBits(numberOfBits);
-                int size = model.GetSymbolSizeInBits(value);
+                uint size = model.GetSymbolSizeInBits(value);
                 uint symbol = model.GetEncodedSymbol(value);
 
                 bitWriter.WriteNBits(size, symbol);
@@ -129,7 +129,7 @@ namespace HuffmanStatic
 
             if ((encodedFileSizeInBits % 8) != 0)
             {
-                bitWriter.WriteNBits((int)(8 - encodedFileSizeInBits % 8), 0);
+                bitWriter.WriteNBits((8 - encodedFileSizeInBits % 8), 0);
             }
 
             bitReader.CloseFile();
