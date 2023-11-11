@@ -22,26 +22,26 @@ namespace HuffmanStatic
 
         public void CreateBinaryTree(int[] symbolFrequency)
         {
-            List<Node> leafs = new List<Node>();
+            List<Node> leaves = new List<Node>();
             for (int i = 0; i < 256; i++)
             {
                 if (symbolFrequency[i] > 0)
                 {
-                    leafs.Add(new Node(symbolFrequency[i], i));
+                    leaves.Add(new Node(symbolFrequency[i], i));
                 }
             }
 
-            while (leafs.Count > 1)
+            while (leaves.Count > 1)
             {
-                leafs = leafs.OrderBy(o => o.GetFrequency()).ToList();
-                int frequencySum = leafs[0].GetFrequency() + leafs[1].GetFrequency();
-                Node node = new Node(frequencySum, leafs[0], leafs[1]);
-                leafs.RemoveAt(0);
-                leafs.RemoveAt(0);
-                leafs.Insert(0, node);
+                leaves = leaves.OrderBy(o => o.GetFrequency()).ToList();
+                int frequencySum = leaves[0].GetFrequency() + leaves[1].GetFrequency();
+                Node node = new Node(frequencySum, leaves[0], leaves[1]);
+                leaves.RemoveAt(0);
+                leaves.RemoveAt(0);
+                leaves.Insert(0, node);
             }
 
-            root = leafs[0];
+            root = leaves[0];
 
         }
 

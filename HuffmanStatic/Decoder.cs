@@ -15,7 +15,7 @@ namespace HuffmanStatic
         private int[] symbolFrequency;
         private Model model;
 
-        private int numberOfSymbols = 0;
+        private uint numberOfSymbols;
 
         public Model GetModel() { return model; }
 
@@ -35,14 +35,15 @@ namespace HuffmanStatic
         {
             int numberOfBits = 8;
 
-            for (int i = 0; i < 256; i++)
+            uint charactersUsedCounter = bitReader.ReadNBits(numberOfBits);
+
+            for (int i = 0; i < charactersUsedCounter; i++)
             {
-                uint value = bitReader.ReadNBits(numberOfBits);
-                symbolFrequency[i] += (int)value;
-                if (value != 0)
-                {
-                    numberOfSymbols += (int)value;
-                }
+                uint character = bitReader.ReadNBits(8);
+                uint size = bitReader.ReadNBits(4);
+                uint value = bitReader.ReadNBits((int)size);
+                symbolFrequency[character] += (int)value;
+                numberOfSymbols += value;
             }
         }
 

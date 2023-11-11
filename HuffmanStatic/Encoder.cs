@@ -1,7 +1,9 @@
 ﻿using Bit_Reader_Writer;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
@@ -81,12 +83,31 @@ namespace HuffmanStatic
 
             int encodedFileSizeInBits = 0;
 
+            int charactersUsedCounter = 0;
+
+            for (int i = 0; i < 256; i++)
+            {
+                if (symbolFrequency[i] != 0)
+                {
+                    charactersUsedCounter++;
+                }
+            }
+
+            bitWriter.WriteNBits(numberOfBits, (uint)charactersUsedCounter);
+            encodedFileSizeInBits += numberOfBits;
+
             for (int i = 0; i < 256; i++)
             {
                 //convert from int to uint!!!!
-                Console.Write(Convert.ToChar(i) + ": ");
-                bitWriter.WriteNBits(numberOfBits, (uint)symbolFrequency[i]);
-                encodedFileSizeInBits += 8;
+                if (symbolFrequency[i] != 0)
+                {
+                    int size = (int)Math.Ceiling(Math.Log2(symbolFrequency[i] + 1));
+                    bitWriter.WriteNBits(8, (uint)i);
+                    bitWriter.WriteNBits(4, (uint)size);
+                    bitWriter.WriteNBits(size, (uint)symbolFrequency[i]);
+                    encodedFileSizeInBits = encodedFileSizeInBits + 8 + 4 + size;
+                }
+                
             }
 
             do
