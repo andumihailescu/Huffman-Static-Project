@@ -1,4 +1,5 @@
 using Bit_Reader_Writer;
+using System.Reflection;
 
 namespace HuffmanStatic
 {
@@ -31,9 +32,9 @@ namespace HuffmanStatic
         {
             encoder.InitializeEncoder(encoderInputFilePath, encoderOutputFilePath);
             encoder.EncodeFile();
-            if (showCodesEncoderCkb.Checked)
+            if (showCodesCkb.Checked)
             {
-                encoder.DisplaySymbolCodes(this.listBoxEncoder);
+                DisplaySymbolCodes(this.codesListBox);
             }
         }
 
@@ -49,7 +50,7 @@ namespace HuffmanStatic
             string formattedTimestamp = currentDateTime.ToString("dd-MM-yyyy-HH-mm");
             string[] parts = decoderInputFilePath.Split('.');
             string extension = parts[parts.Length - 2];
-            
+
             decoderOutputFilePath = openFileDialog.FileName + "." + formattedTimestamp + "." + extension;
 
             decoder = new Decoder();
@@ -59,10 +60,30 @@ namespace HuffmanStatic
         {
             decoder.InitializeDecoder(decoderInputFilePath, decoderOutputFilePath);
             decoder.DecodeFile();
-            if (showCodesDecoderCkb.Checked)
+            if (showCodesCkb.Checked)
             {
-                decoder.DisplaySymbolCodes(this.listBoxDecoder);
+                DisplaySymbolCodes(this.codesListBox);
             }
         }
+
+        private void DisplaySymbolCodes(ListBox listBox)
+        {
+            listBox.Items.Clear();
+
+            for (uint i = 0; i < 256; i++)
+            {
+                if (encoder.GetModel().GetSymbolSizeInBits(i) != 0)
+                {
+                    char symbol = (char)i;
+                    string value = "";
+                    for (uint j = 0; j < encoder.GetModel().GetSymbolSizeInBits(i); j++)
+                    {
+                        value += ((encoder.GetModel().GetEncodedSymbol(i) >> (int)(encoder.GetModel().GetSymbolSizeInBits(i) - j - 1)) & 1);
+                    }
+                    listBox.Items.Add(symbol + "= " + value);
+                }
+            }
+        }
+
     }
 }

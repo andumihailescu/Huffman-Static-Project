@@ -32,10 +32,8 @@
             encodeFileBtn = new Button();
             loadEncodedFileBtn = new Button();
             decodeFileBtn = new Button();
-            showCodesEncoderCkb = new CheckBox();
-            showCodesDecoderCkb = new CheckBox();
-            listBoxEncoder = new ListBox();
-            listBoxDecoder = new ListBox();
+            showCodesCkb = new CheckBox();
+            codesListBox = new ListBox();
             label1 = new Label();
             label2 = new Label();
             SuspendLayout();
@@ -62,7 +60,7 @@
             // 
             // loadEncodedFileBtn
             // 
-            loadEncodedFileBtn.Location = new Point(466, 124);
+            loadEncodedFileBtn.Location = new Point(215, 124);
             loadEncodedFileBtn.Name = "loadEncodedFileBtn";
             loadEncodedFileBtn.Size = new Size(150, 50);
             loadEncodedFileBtn.TabIndex = 2;
@@ -72,7 +70,7 @@
             // 
             // decodeFileBtn
             // 
-            decodeFileBtn.Location = new Point(466, 180);
+            decodeFileBtn.Location = new Point(215, 180);
             decodeFileBtn.Name = "decodeFileBtn";
             decodeFileBtn.Size = new Size(150, 50);
             decodeFileBtn.TabIndex = 3;
@@ -80,48 +78,29 @@
             decodeFileBtn.UseVisualStyleBackColor = true;
             decodeFileBtn.Click += decodeFileBtn_Click;
             // 
-            // showCodesEncoderCkb
+            // showCodesCkb
             // 
-            showCodesEncoderCkb.AutoSize = true;
-            showCodesEncoderCkb.Location = new Point(182, 124);
-            showCodesEncoderCkb.Name = "showCodesEncoderCkb";
-            showCodesEncoderCkb.Size = new Size(112, 24);
-            showCodesEncoderCkb.TabIndex = 4;
-            showCodesEncoderCkb.Text = "Show Codes";
-            showCodesEncoderCkb.UseVisualStyleBackColor = true;
+            showCodesCkb.AutoSize = true;
+            showCodesCkb.Location = new Point(420, 47);
+            showCodesCkb.Name = "showCodesCkb";
+            showCodesCkb.Size = new Size(112, 24);
+            showCodesCkb.TabIndex = 4;
+            showCodesCkb.Text = "Show Codes";
+            showCodesCkb.UseVisualStyleBackColor = true;
             // 
-            // showCodesDecoderCkb
+            // codesListBox
             // 
-            showCodesDecoderCkb.AutoSize = true;
-            showCodesDecoderCkb.Location = new Point(638, 124);
-            showCodesDecoderCkb.Name = "showCodesDecoderCkb";
-            showCodesDecoderCkb.Size = new Size(112, 24);
-            showCodesDecoderCkb.TabIndex = 5;
-            showCodesDecoderCkb.Text = "Show Codes";
-            showCodesDecoderCkb.UseVisualStyleBackColor = true;
-            // 
-            // listBoxEncoder
-            // 
-            listBoxEncoder.FormattingEnabled = true;
-            listBoxEncoder.ItemHeight = 20;
-            listBoxEncoder.Location = new Point(182, 154);
-            listBoxEncoder.Name = "listBoxEncoder";
-            listBoxEncoder.Size = new Size(150, 284);
-            listBoxEncoder.TabIndex = 6;
-            // 
-            // listBoxDecoder
-            // 
-            listBoxDecoder.FormattingEnabled = true;
-            listBoxDecoder.ItemHeight = 20;
-            listBoxDecoder.Location = new Point(638, 154);
-            listBoxDecoder.Name = "listBoxDecoder";
-            listBoxDecoder.Size = new Size(150, 284);
-            listBoxDecoder.TabIndex = 7;
+            codesListBox.FormattingEnabled = true;
+            codesListBox.ItemHeight = 20;
+            codesListBox.Location = new Point(420, 77);
+            codesListBox.Name = "codesListBox";
+            codesListBox.Size = new Size(150, 364);
+            codesListBox.TabIndex = 6;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(148, 38);
+            label1.Location = new Point(62, 51);
             label1.Name = "label1";
             label1.Size = new Size(57, 20);
             label1.TabIndex = 8;
@@ -130,7 +109,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(598, 38);
+            label2.Location = new Point(252, 47);
             label2.Name = "label2";
             label2.Size = new Size(76, 20);
             label2.TabIndex = 9;
@@ -140,13 +119,11 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(582, 453);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(listBoxDecoder);
-            Controls.Add(listBoxEncoder);
-            Controls.Add(showCodesDecoderCkb);
-            Controls.Add(showCodesEncoderCkb);
+            Controls.Add(codesListBox);
+            Controls.Add(showCodesCkb);
             Controls.Add(decodeFileBtn);
             Controls.Add(loadEncodedFileBtn);
             Controls.Add(encodeFileBtn);
@@ -163,10 +140,8 @@
         private Button encodeFileBtn;
         private Button loadEncodedFileBtn;
         private Button decodeFileBtn;
-        private CheckBox showCodesEncoderCkb;
-        private CheckBox showCodesDecoderCkb;
-        private ListBox listBoxEncoder;
-        private ListBox listBoxDecoder;
+        private CheckBox showCodesCkb;
+        private ListBox codesListBox;
         private Label label1;
         private Label label2;
     }

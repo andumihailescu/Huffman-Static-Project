@@ -11,11 +11,12 @@ namespace HuffmanStatic
         private int frequency;
         private int symbol;
         private Node left, right;
-
+        
         public int GetFrequency() { return frequency; }
         public int GetSymbol() { return symbol; }
         public Node GetLeft() { return left; }
         public Node GetRight() { return right; }
+        
 
         public Node()
         {
@@ -37,5 +38,6 @@ namespace HuffmanStatic
             this.left = left;
             this.right = right;
         }
+
     }
 }
