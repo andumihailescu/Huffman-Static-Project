@@ -22,12 +22,13 @@ namespace HuffmanStatic
         private Model model;
 
         private string encoderInputFilePath;
+        private const uint eightBits = 8;
 
         public Model GetModel() { return model; }
 
-        public Encoder() 
+        public Encoder()
         {
-            
+
         }
 
         public void InitializeEncoder(string inputFilePath, string outputFilePath)
@@ -42,7 +43,7 @@ namespace HuffmanStatic
 
         public void CountFrequency()
         {
-            uint numberOfBits = 8;
+            uint numberOfBits = eightBits;
             long numberOfRemainingBits = fileLengthInBits;
 
             do
@@ -56,7 +57,7 @@ namespace HuffmanStatic
                 symbolFrequency[value]++;
                 numberOfRemainingBits -= numberOfBits;
 
-            } while(numberOfRemainingBits > 0);
+            } while (numberOfRemainingBits > 0);
 
             bitReader.CloseFile();
         }
@@ -76,7 +77,7 @@ namespace HuffmanStatic
 
             CreateModel();
 
-            uint numberOfBits = 8;
+            uint numberOfBits = eightBits;
             long numberOfRemainingBits = fileLengthInBits;
 
             bitReader = new BitReader(encoderInputFilePath);
@@ -98,7 +99,6 @@ namespace HuffmanStatic
 
             for (uint i = 0; i < 256; i++)
             {
-                //convert from int to uint!!!!
                 if (symbolFrequency[i] != 0)
                 {
                     uint size = (uint)Math.Ceiling(Math.Log2(symbolFrequency[i] + 1));
@@ -107,7 +107,6 @@ namespace HuffmanStatic
                     bitWriter.WriteNBits(size, symbolFrequency[i]);
                     encodedFileSizeInBits = encodedFileSizeInBits + 8 + 4 + size;
                 }
-                
             }
 
             do
@@ -116,7 +115,7 @@ namespace HuffmanStatic
                 {
                     numberOfBits = (uint)numberOfRemainingBits;
                 }
-                
+
                 uint value = bitReader.ReadNBits(numberOfBits);
                 uint size = model.GetSymbolSizeInBits(value);
                 uint symbol = model.GetEncodedSymbol(value);
@@ -134,10 +133,6 @@ namespace HuffmanStatic
 
             bitReader.CloseFile();
             bitWriter.CloseFile();
-
         }
-
-        
-
     }
 }
